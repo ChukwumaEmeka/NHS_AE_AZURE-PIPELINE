@@ -1,0 +1,37 @@
+resources:
+  jobs:
+    nhsae_monthly_load:
+      name: nhsae_monthly_load
+      tasks:
+        - task_key: landing_to_bronze
+          notebook_task:
+            notebook_path: /Workspace/Users/zurishadai75@gmail.com/NHS_AE_AZURE-PIPELINE/02_landing_to_bronze
+            source: WORKSPACE
+        - task_key: is_bronze
+          depends_on:
+            - task_key: landing_to_bronze
+          condition_task:
+            op: EQUAL_TO
+            left: "{{tasks.landing_to_bronze.values.status}}"
+            right: bronze
+        - task_key: bronze_to_silver
+          depends_on:
+            - task_key: is_bronze
+              outcome: "true"
+          notebook_task:
+            notebook_path: /Workspace/Users/zurishadai75@gmail.com/NHS_AE_AZURE-PIPELINE/03_bronze_to_silver
+            base_parameters:
+              bronze_path: "{{tasks.landing_to_bronze.values.bronze_path}}"
+            source: WORKSPACE
+        - task_key: silver_to_gold
+          depends_on:
+            - task_key: bronze_to_silver
+          notebook_task:
+            notebook_path: /Workspace/Users/zurishadai75@gmail.com/NHS_AE_AZURE-PIPELINE/04_silver_to_gold
+            source: WORKSPACE
+      queue:
+        enabled: true
+      parameters:
+        - name: file_name
+          default: ae_2024_10.csv
+      performance_target: STANDARD

@@ -97,7 +97,7 @@ Unity Catalog records table-level lineage automatically from the job runs, with 
 ![Unity Catalog lineage: silver ae_org_monthly and ae_by_type feed gold trust_monthly](images/lineage.png)
 
 ### 6. Power BI report
-[`powerbi/nhsae_azure_report.pbix`](powerbi/nhsae_azure_report.pbix) reads the two gold tables through a Databricks serverless SQL warehouse in **Import mode**, so the report works without a running workspace.
+[`nhsae_azure_report.pbix`](nhsae_azure_report.pbix) reads the two gold tables through a Databricks serverless SQL warehouse in **Import mode**, so the report works without a running workspace.
 
 - **National overview:** attendances and % within 4 hours for the selected month, the four-month trend, and performance by department type and booked/unbooked route. All percentages are DAX measures over summed counts, never averages of percentages.
 - **Trust comparison:** NHS trusts ranked by % within 4 hours, with 12-hour decision-to-admit waits per 1,000 emergency admissions, and the 10 lowest-performing trusts.
@@ -175,7 +175,7 @@ Because the code and job definition are in Git, and the data and Unity Catalog o
 | `03_bronze_to_silver` | Cleaning, data quality, reconciliation, silver writes |
 | `04_silver_to_gold` | Gold rebuild and headline check |
 | `nhsae_monthly_load.yml` | Databricks job definition |
-| `powerbi/nhsae_azure_report.pbix` | Power BI report on the gold tables |
+| `nhsae_azure_report.pbix` | Power BI report on the gold tables |
 
 ## Rebuilding
 
